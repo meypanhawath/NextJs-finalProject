@@ -1,8 +1,8 @@
 import { notFound } from 'next/navigation';
 import { fetchMovieDetails, fetchSimilarMovies, getImageUrl } from '@/services/tmdb';
-import { MovieDetails } from '@/types/tmdb';
 import TrailerModal from '@/app/components/TrailerModal';
 import WatchlistButton from '@/app/components/WatchlistButton';
+import TrackRecent from '@/app/components/TrackRecent';
 import MovieCard from '@/app/components/MovieCard';
 import Link from 'next/link';
 import DiscoverMovies from '@/app/components/DiscoverMovies';
@@ -13,7 +13,7 @@ export default async function MovieDetailPage({ params }: { params: { id: string
   if (Number.isNaN(id)) return notFound();
 
   try {
-    const data: MovieDetails = await fetchMovieDetails(id);
+    const data = await fetchMovieDetails(id);
 
     if (!data || !data.id) {
       return (
@@ -32,6 +32,8 @@ export default async function MovieDetailPage({ params }: { params: { id: string
 
     return (
       <div className="min-h-screen pt-24 relative bg-black">
+        {/* Track recent views locally (client component) */}
+        <TrackRecent id={data.id} title={data.title} poster_path={data.poster_path} />
         {/* Backdrop background (z-0) */}
         {backdropUrl && (
           <div

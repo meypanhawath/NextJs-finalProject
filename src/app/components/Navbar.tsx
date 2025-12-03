@@ -1,10 +1,13 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faBell, faUser, faBars, faTimes } from '@fortawesome/free-solid-svg-icons';
+import dynamic from 'next/dynamic';
+
+const SearchBar = dynamic(() => import('./SearchBar'), { ssr: false });
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -31,7 +34,7 @@ export default function Navbar() {
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2">
             <span className="text-3xl font-bold bg-gradient-to-r from-[#00C6B1] to-blue-400 bg-clip-text text-transparent">
-              Moviestan
+              MovieNight
             </span>
           </Link>
 
@@ -56,16 +59,24 @@ export default function Navbar() {
 
           {/* Right side icons */}
           <div className="flex items-center space-x-6">
-            <button className="text-white hover:text-[#00C6B1] transition-colors">
-              <FontAwesomeIcon icon={faSearch} className="w-5 h-5" />
-            </button>
+            {/* Search */}
+            <div>
+              {/* lazy load SearchBar to avoid adding heavy client logic to navbar */}
+              <React.Suspense fallback={<button className="text-white hover:text-[#00C6B1] transition-colors"><FontAwesomeIcon icon={faSearch} className="w-5 h-5" /></button>}>
+                <SearchBar onOpenChange={(open) => { if (open) setIsMobileMenuOpen(false); }} />
+              </React.Suspense>
+            </div>
+
+            {/* Bell (plain button) */}
             <button className="text-white hover:text-[#00C6B1] transition-colors">
               <FontAwesomeIcon icon={faBell} className="w-5 h-5" />
             </button>
-            <button className="text-white hover:text-[#00C6B1] transition-colors">
+
+            {/* User icon links to Activity */}
+            <Link href="/account/activity" className="text-white hover:text-[#00C6B1] transition-colors" aria-label="My activity">
               <FontAwesomeIcon icon={faUser} className="w-5 h-5" />
-            </button>
-            
+            </Link>
+
             {/* Mobile menu button */}
             <button
               className="md:hidden text-white"

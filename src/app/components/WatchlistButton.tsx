@@ -1,20 +1,25 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import {
+  addToLocalWatchlist,
+  isInLocalWatchlist,
+  removeFromLocalWatchlist,
+  MovieItem,
+} from '../../lib/localStore';
 
 type Props = {
   movieId: number;
   title?: string;
+  poster_path?: string | null;
 };
 
-export default function WatchlistButton({ movieId, title }: Props) {
+export default function WatchlistButton({ movieId, title, poster_path }: Props) {
   const [saved, setSaved] = useState(false);
 
   useEffect(() => {
     try {
-      const raw = localStorage.getItem('watchlist');
-      const list: number[] = raw ? JSON.parse(raw) : [];
-      setSaved(list.includes(movieId));
+      setSaved(isInLocalWatchlist(movieId));
     } catch (e) {
       setSaved(false);
     }
@@ -22,16 +27,14 @@ export default function WatchlistButton({ movieId, title }: Props) {
 
   function toggle() {
     try {
-      const raw = localStorage.getItem('watchlist');
-      const list: number[] = raw ? JSON.parse(raw) : [];
-      let next: number[];
-      if (list.includes(movieId)) {
-        next = list.filter((id) => id !== movieId);
+      if (isInLocalWatchlist(movieId)) {
+        removeFromLocalWatchlist(movieId);
+        setSaved(false);
       } else {
-        next = [movieId, ...list];
+        const item: MovieItem = { id: movieId, title, poster_path };
+        addToLocalWatchlist(item);
+        setSaved(true);
       }
-      localStorage.setItem('watchlist', JSON.stringify(next));
-      setSaved(next.includes(movieId));
     } catch (e) {
       console.error('Watchlist toggle failed', e);
     }

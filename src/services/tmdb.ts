@@ -46,6 +46,10 @@ export interface MovieDetails {
   runtime: number;
   vote_average: number;
   genres: Array<{ id: number; name: string }>;
+  tagline?: string;
+  status?: string;
+  budget?: number;
+  revenue?: number;
   videos: {
     results: Array<{
       id: string;
@@ -154,6 +158,10 @@ export async function fetchTVShowDetails(tvId: number): Promise<any> {
 
 export async function searchMulti(query: string): Promise<TMDBResponse> {
   return fetchJson(`${BASE_URL}/search/multi?api_key=${API_KEY}&query=${encodeURIComponent(query)}`);
+}
+
+export async function searchMovies(query: string): Promise<TMDBResponse> {
+  return fetchJson(`${BASE_URL}/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(query)}`);
 }
 
 export async function fetchPopularPeople(): Promise<{ page: number; results: Person[] }> {
