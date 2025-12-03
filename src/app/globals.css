@@ -1,0 +1,36 @@
+
+@import "tailwindcss";
+
+/* Default color variables (ensure pages have correct background/text colors) */
+:root {
+  --foreground-rgb: 255 255 255; /* white text */
+  --background-start-rgb: 0 0 0; /* black background */
+  --background-end-rgb: 10 10 10;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #000;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #00C6B1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #00a896;
+}
