@@ -20,9 +20,27 @@ export default function TVShowsPage() {
           fetchTrendingTVShows(),
           fetchPopularTVShows()
         ]);
-        
-        setTrendingTVShows(trendingData.results || []);
-        setPopularTVShows(popularData.results || []);
+
+        const normalizeTV = (arr: any[] = []) =>
+          arr
+            .filter((r) => r && typeof r === 'object' && 'name' in r)
+            .map((r) => ({
+              id: r.id,
+              name: r.name,
+              original_name: r.original_name ?? r.name,
+              overview: r.overview ?? '',
+              poster_path: r.poster_path ?? null,
+              backdrop_path: r.backdrop_path ?? null,
+              first_air_date: r.first_air_date ?? r.release_date ?? '',
+              vote_average: typeof r.vote_average === 'number' ? r.vote_average : 0,
+              vote_count: typeof r.vote_count === 'number' ? r.vote_count : 0,
+              popularity: typeof r.popularity === 'number' ? r.popularity : 0,
+              genre_ids: Array.isArray(r.genre_ids) ? r.genre_ids : [],
+              origin_country: Array.isArray(r.origin_country) ? r.origin_country : [],
+            } as TVShow));
+
+        setTrendingTVShows(normalizeTV(trendingData.results || []));
+        setPopularTVShows(normalizeTV(popularData.results || []));
       } catch (error) {
         console.error('Error loading TV shows:', error);
       } finally {

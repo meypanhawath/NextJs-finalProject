@@ -50,6 +50,8 @@ export interface TVShowDetails extends TVShow {
   number_of_seasons: number;
   number_of_episodes: number;
   seasons: Season[];
+  videos?: { id?: string; results: Video[] };
+  credits?: Credits;
 }
 
 export interface Season {

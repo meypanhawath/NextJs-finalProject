@@ -150,7 +150,7 @@ export default async function MovieDetailPage({ params }: { params: { id: string
           </div>
 
           {/* Similar Movies */}
-          {similar?.results?.length > 0 && (
+          {(Array.isArray(similar?.results) && similar.results.length > 0) && (
             <div className="mt-8 sm:mt-10">
               <h3 className="text-white text-xl sm:text-2xl font-semibold mb-3">Similar Movies</h3>
 

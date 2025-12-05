@@ -20,9 +20,28 @@ export default function MoviesPage() {
           fetchTrendingMovies(),
           fetchPopularMovies()
         ]);
-        
-        setTrendingMovies(trendingData.results || []);
-        setPopularMovies(popularData.results || []);
+
+        // Normalize API results to our `Movie` shape: filter out TV items and fill missing fields.
+        const normalize = (arr: any[] = []) =>
+          arr
+            .filter((r) => r && typeof r === 'object' && 'title' in r)
+            .map((r) => ({
+              id: r.id,
+              title: r.title,
+              original_title: r.original_title ?? r.title,
+              overview: r.overview ?? '',
+              poster_path: r.poster_path ?? null,
+              backdrop_path: r.backdrop_path ?? null,
+              release_date: r.release_date ?? r.first_air_date ?? '',
+              vote_average: typeof r.vote_average === 'number' ? r.vote_average : 0,
+              vote_count: typeof r.vote_count === 'number' ? r.vote_count : 0,
+              popularity: typeof r.popularity === 'number' ? r.popularity : 0,
+              genre_ids: Array.isArray(r.genre_ids) ? r.genre_ids : [],
+              adult: typeof r.adult === 'boolean' ? r.adult : false,
+            } as Movie));
+
+        setTrendingMovies(normalize(trendingData.results));
+        setPopularMovies(normalize(popularData.results));
       } catch (error) {
         console.error('Error loading movies:', error);
       } finally {

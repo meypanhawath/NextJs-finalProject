@@ -88,8 +88,9 @@ export interface PersonDetails {
   tv_credits?: any;
 }
 
-const headers = {
-  Authorization: ACCESS_TOKEN ? `Bearer ${ACCESS_TOKEN}` : undefined,
+// Build headers safely so values are always strings (no `undefined`) to satisfy fetch typings
+const defaultHeaders: HeadersInit = {
+  ...(ACCESS_TOKEN ? { Authorization: `Bearer ${ACCESS_TOKEN}` } : {}),
   'Content-Type': 'application/json',
 };
 
@@ -98,7 +99,7 @@ async function fetchJson<T>(url: string): Promise<T> {
     throw new Error('Missing TMDB configuration. Ensure NEXT_PUBLIC_TMDB_BASE_URL and NEXT_PUBLIC_TMDB_API_KEY are set.');
   }
 
-  const response = await fetch(url, { headers });
+  const response = await fetch(url, { headers: defaultHeaders });
 
   const contentType = response.headers.get('content-type') || '';
   const text = await response.text();
