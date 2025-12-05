@@ -5,7 +5,7 @@ export default function Footer() {
         <div className="flex flex-col md:flex-row justify-between items-center">
           <div className="mb-6 md:mb-0">
             <span className="text-2xl font-bold bg-gradient-to-r from-[#00C6B1] to-blue-400 bg-clip-text text-transparent">
-              MovieNight
+              CozyNight
             </span>
           </div>
           

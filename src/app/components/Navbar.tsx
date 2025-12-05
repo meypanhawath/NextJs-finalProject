@@ -34,7 +34,7 @@ export default function Navbar() {
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2">
             <span className="text-3xl font-bold bg-gradient-to-r from-[#00C6B1] to-blue-400 bg-clip-text text-transparent">
-              MovieNight
+              CozyNight
             </span>
           </Link>
 
